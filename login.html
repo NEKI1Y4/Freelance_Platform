@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <div class="logo-circle">FP</div>
+            <h2>Вход</h2>
+        </div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <ul class="flash-messages">{% for msg in messages %}<li>{{ msg }}</li>{% endfor %}</ul>
+          {% endif %}
+        {% endwith %}
+        <form method="post" class="main-form" autocomplete="off">
+            <label for="username">Имя пользователя</label>
+            <input type="text" id="username" name="username" placeholder="Имя пользователя" required>
+
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="Пароль" required>
+
+            <button type="submit">Войти</button>
+        </form>
+        <div style="margin-top:15px;">
+            Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Freelance Platform — Главная</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f7f9fc;
+        position: relative;
+        overflow-x: hidden;
+      }
+      .topo-bg {
+        position: fixed;
+        top: -10vw; left: -10vw;
+        width: 120vw; height: 120vh;
+        z-index: 0;
+        pointer-events: none;
+        will-change: transform;
+        animation: spinTopo 60s linear infinite;
+      }
+      @keyframes spinTopo {
+        from { transform: rotate(0deg);}
+        to   { transform: rotate(360deg);}
+      }
+      .content-on-top {
+        position: relative;
+        z-index: 2;
+      }
+      .navbar-wrapper {
+        padding-top: 36px;
+      }
+      .navbar {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 40px;
+        background: rgba(255,255,255,0.67);
+        backdrop-filter: blur(4px);
+        border-radius: 0 0 18px 18px;
+        margin-bottom: 45px;
+        box-shadow: 0 2px 12px rgba(60,90,150,0.07);
+        height: 72px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 2;
+      }
+      .logo-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #7a8fff 0%, #bdbef7 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        box-shadow: 0 2px 8px #a5aed6aa;
+      }
+      /* Центрируем вкладки абсолютно по центру всей шапки */
+      .nav-tabs {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        gap: 36px;
+        z-index: 1;
+      }
+      .nav-tabs a {
+        text-decoration: none;
+        color: #4356b4;
+        font-weight: 600;
+        font-size: 1.15rem;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: background 0.18s, color 0.18s;
+      }
+      .nav-tabs a:hover {
+        background: #eaefff;
+        color: #7a8fff;
+      }
+      .profile-btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        z-index: 2;
+      }
+      .profile-icon {
+        width: 40px;
+        height: 40px;
+        background: #eaefff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        color: #4356b4;
+        font-weight: bold;
+        box-shadow: 0 2px 8px #d1defc80;
+      }
+      .profile-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 48px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(60,90,150,0.18);
+        min-width: 170px;
+        z-index: 999;
+      }
+      .profile-btn.open .profile-dropdown {
+        display: block;
+      }
+      .profile-dropdown a {
+        display: block;
+        color: #4356b4;
+        text-decoration: none;
+        padding: 12px 20px;
+        font-size: 1rem;
+        border-bottom: 1px solid #e3f0ff;
+        transition: background 0.2s;
+      }
+      .profile-dropdown a:last-child {
+        border-bottom: none;
+      }
+      .profile-dropdown a:hover {
+        background: #eaefff;
+      }
+      .main-content {
+        margin: 60px auto 0 auto;
+        max-width: 720px;
+        text-align: center;
+        background: rgba(255,255,255,0.84);
+        border-radius: 18px;
+        box-shadow: 0 2px 32px #bdbef766;
+        padding: 45px 34px 48px 34px;
+      }
+      .main-content h1 {
+        font-size: 2.7rem;
+        color: #4356b4;
+        font-weight: 900;
+        text-shadow: 2px 2px 0 #fff, 4px 4px 12px #bdbef7aa;
+        margin-bottom: 16px;
+      }
+      .main-content p {
+        color: #5966b3;
+        font-size: 1.2rem;
+        margin-bottom: 32px;
+      }
+      .main-btn {
+        background: linear-gradient(90deg, #7a8fff 0%, #bdbef7 100%);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 32px;
+        font-size: 1.2rem;
+        margin: 10px 14px 0 0;
+        cursor: pointer;
+        box-shadow: 0 2px 8px #bdbef77a;
+        transition: background 0.2s, color 0.2s;
+      }
+      .main-btn:hover {
+        background: linear-gradient(90deg, #4356b4 0%, #7a8fff 100%);
+        color: #fff;
+      }
+      @media (max-width: 600px) {
+        .navbar { flex-direction: column; gap: 16px; padding: 0 10px; height: auto;}
+        .navbar-wrapper {padding-top: 10px;}
+        .main-content { padding: 20px 8px 28px 8px; }
+        .main-content h1 { font-size: 1.5rem; }
+        .nav-tabs {position: static; transform:none; margin: 10px auto;}
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.querySelector('.profile-btn');
+        if (btn) {
+          btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            btn.classList.toggle('open');
+          });
+          document.addEventListener('click', function () {
+            btn.classList.remove('open');
+          });
+        }
+      });
+    </script>
+</head>
+<body>
+    <div class="topo-bg">
+      <svg width="100%" height="100%" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <g>
+          <path d="M165,500 Q450,350 780,540" stroke="#98a8f8" stroke-width="2" fill="none"/>
+          <path d="M60,370 Q400,220 800,420" stroke="#98a8f8" stroke-width="2" fill="none"/>
+          <path d="M200,120 Q480,100 700,170" stroke="#7d87c9" stroke-width="2" fill="none"/>
+          <path d="M100,200 Q400,80 820,200" stroke="#bdbef7" stroke-width="1.5" fill="none"/>
+          <path d="M400,40 Q550,50 680,90" stroke="#5e6ad2" stroke-width="2" fill="none"/>
+          <path d="M80,520 Q380,430 830,580" stroke="#bdbef7" stroke-width="1.5" fill="none"/>
+        </g>
+      </svg>
+    </div>
+    <div class="content-on-top">
+      <div class="navbar-wrapper">
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-circle">FP</div>
+                <span style="font-weight:700;color:#4356b4;font-size:1.25rem;">Freelance Platform</span>
+            </div>
+            <div class="nav-tabs">
+                <a href="/employer">Для Работодателя</a>
+                <a href="/worker">Для Исполнителя</a>
+            </div>
+            <div>
+            {% if username %}
+                <button class="profile-btn">
+                    <div class="profile-icon">
+                        {{ username[0]|upper }}
+                    </div>
+                    <div class="profile-dropdown">
+                        <a href="{{ url_for('dashboard') }}">Личный кабинет</a>
+                        <a href="{{ url_for('logout') }}">Выйти</a>
+                    </div>
+                </button>
+            {% else %}
+                <a href="{{ url_for('login') }}"><button class="main-btn" style="margin-right:8px;">Войти</button></a>
+                <a href="{{ url_for('register') }}"><button class="main-btn">Регистрация</button></a>
+            {% endif %}
+            </div>
+        </nav>
+      </div>
+      <div class="main-content">
+          <h1>Добро пожаловать<br>на Freelance Platform!</h1>
+          <p>Ищете работу или исполнителя? Здесь вы найдёте всё.<br>Выберите подходящую вкладку или войдите в личный кабинет.</p>
+          {% if not username %}
+              <a href="{{ url_for('login') }}"><button class="main-btn">Войти</button></a>
+              <a href="{{ url_for('register') }}"><button class="main-btn">Регистрация</button></a>
+          {% else %}
+              <a href="{{ url_for('dashboard') }}"><button class="main-btn">Личный кабинет</button></a>
+          {% endif %}
+      </div>
+    </div>
+</body>
+</html>

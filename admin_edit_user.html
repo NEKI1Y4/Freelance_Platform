@@ -1,0 +1,21 @@
+
+{% block title %}Редактирование пользователя{% endblock %}
+{% block content %}
+<h2>Редактировать пользователя</h2>
+<form method="post">
+  <div class="mb-3">
+    <label for="username" class="form-label">Имя пользователя</label>
+    <input type="text" class="form-control" name="username" id="username" value="{{ user.username }}">
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" class="form-control" name="email" id="email" value="{{ user.email }}">
+  </div>
+  <div class="mb-3">
+    <label for="role_id" class="form-label">Роль (1 - админ, 2 - работодатель, 3 - исполнитель)</label>
+    <input type="number" class="form-control" name="role_id" id="role_id" value="{{ user.role_id }}">
+  </div>
+  <button type="submit" class="btn btn-success">Сохранить</button>
+  <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">Назад</a>
+</form>
+{% endblock %}

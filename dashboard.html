@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет — Freelance Platform</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f7f9fc;
+        position: relative;
+        overflow-x: hidden;
+      }
+      .topo-bg-blur {
+        position: fixed;
+        top: -10vw;
+        left: -10vw;
+        width: 120vw;
+        height: 120vh;
+        z-index: 0;
+        pointer-events: none;
+        filter: blur(14px) brightness(1.1) saturate(1.2);
+        opacity: 0.7;
+        will-change: transform;
+        animation: spinTopo 60s linear infinite;
+      }
+      @keyframes spinTopo {
+        from { transform: rotate(0deg);}
+        to   { transform: rotate(360deg);}
+      }
+      .dashboard-content {
+        position: relative;
+        z-index: 2;
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 48px 0 48px 0;
+      }
+      .back-btn {
+        display: inline-block;
+        background: linear-gradient(90deg, #bdbef7 0%, #7a8fff 100%);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        border-radius: 7px;
+        padding: 10px 28px;
+        font-size: 1.09rem;
+        margin-bottom: 24px;
+        margin-left: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 0 1px 6px #bdbef76c;
+        transition: background 0.18s;
+      }
+      .back-btn:hover {
+        background: linear-gradient(90deg, #4253a6 0%, #7a8fff 100%);
+        color: #fff;
+      }
+      .dashboard-section {
+        background: rgba(255,255,255,0.96);
+        border-radius: 16px;
+        box-shadow: 0 2px 18px #9ca4e022;
+        margin-bottom: 26px;
+        padding: 32px 38px 32px 38px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+      .dashboard-section.column {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+      }
+      .profile-info {
+        flex: 1;
+      }
+      .profile-info h2 {
+        margin: 0 0 5px 0;
+        font-size: 1.6rem;
+        color: #4253a6;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .profile-info .email {
+        color: #9298b3;
+        font-size: 1.07rem;
+        margin-bottom: 13px;
+        word-break: break-all;
+      }
+      .profile-info-data {
+        margin-bottom: 18px;
+      }
+      .profile-info-data strong {
+        font-weight: 600;
+        color: #222;
+      }
+      .profile-avatar {
+        min-width: 110px;
+        min-height: 110px;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: linear-gradient(120deg, #bdbef7 30%, #7a8fff 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        box-shadow: 0 2px 12px #cdd4fa77;
+    }
+      .profile-avatar svg {
+        width: 72px;
+        height: 72px;
+        fill: #6e7bbd;
+        opacity: 0.9;
+      }
+      .edit-btn, .custom-btn {
+        background: linear-gradient(90deg, #7a8fff 0%, #bdbef7 100%);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 7px;
+        padding: 10px 26px;
+        font-size: 1.05rem;
+        margin-top: 12px;
+        cursor: pointer;
+        transition: background 0.18s;
+        box-shadow: 0 1px 6px #bdbef76c;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .edit-btn:hover, .custom-btn:hover {
+        background: linear-gradient(90deg, #4253a6 0%, #7a8fff 100%);
+      }
+      .section-title {
+        font-size: 1.23rem;
+        font-weight: 600;
+        color: #6e7bbd;
+        margin-bottom: 9px;
+      }
+      .section-desc {
+        color: #565656;
+        font-size: 0.98rem;
+        margin-bottom: 12px;
+      }
+      /* === MODAL === */
+      .modal-bg {
+        position: fixed;
+        z-index: 10000;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(50,54,97,0.27);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
+      .modal-bg.active { display: flex; }
+      .modal {
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 6px 32px #bdbef7bb;
+        padding: 32px 32px 24px 32px;
+        min-width: 320px;
+        max-width: 95vw;
+        min-height: 170px;
+        position: relative;
+        animation: modalShow 0.2s;
+      }
+      @keyframes modalShow { from {opacity:0; transform: translateY(40px);} to {opacity:1; transform: none;} }
+      .modal-close {
+        position: absolute;
+        top: 16px; right: 22px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #7a8fff;
+        cursor: pointer;
+        font-weight: 900;
+        transition: color 0.17s;
+      }
+      .modal-close:hover { color: #4253a6; }
+      .modal h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #4253a6;
+        margin-top: 0;
+        margin-bottom: 15px;
+      }
+      .modal label {
+        display:block;
+        color: #4f5586;
+        font-weight: 500;
+        margin: 10px 0 4px 0;
+        font-size: 1rem;
+      }
+      .modal input, .modal textarea, .modal select {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 7px;
+        border: 1px solid #d9e3fa;
+        font-size: 1rem;
+        margin-bottom: 9px;
+        background: #f7f9fc;
+        font-family: inherit;
+        transition: border 0.16s;
+      }
+      .modal input:focus, .modal textarea:focus, .modal select:focus {
+        border: 1.5px solid #7a8fff;
+        outline: none;
+      }
+      .modal-submit {
+        margin-top: 10px;
+        background: linear-gradient(90deg, #7a8fff 0%, #bdbef7 100%);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 7px;
+        padding: 10px 28px;
+        font-size: 1.05rem;
+        cursor: pointer;
+        transition: background 0.18s;
+        box-shadow: 0 1px 6px #bdbef76c;
+      }
+      .modal-submit:hover {
+        background: linear-gradient(90deg, #4253a6 0%, #7a8fff 100%);
+      }
+      /* ================= */
+      .rating-section {
+        width: 100%;
+      }
+      .rating-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 7px;
+        gap: 8px;
+      }
+      .rating-label {
+        font-weight: 600;
+        color: #333;
+        width: 160px;
+      }
+      .rating-value {
+        font-size: 1.05rem;
+      }
+      .progress-bar-bg {
+        width: 70%;
+        height: 30px;
+        background: linear-gradient(90deg, #e3f0ff 0%, #eaf5fd 100%);
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 16px 0 3px 0;
+        position: relative;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #a8e6a3 0%, #e8f9e6 100%);
+        border-radius: 8px 0 0 8px;
+        position: absolute;
+        left: 0; top: 0;
+        font-size: 0.98rem;
+        color: #307a47;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 12px;
+        transition: width 0.6s cubic-bezier(.64,.07,.26,.94);
+      }
+      .progress-bar-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 70%;
+        font-size: 0.95rem;
+        color: #8bb3ff;
+        margin-bottom: 2px;
+      }
+      .level-label {
+        font-weight: 700;
+        color: #58a0fd;
+      }
+      .level-num {
+        color: #b0b9cd;
+        font-weight: 500;
+      }
+      .btn-row {
+        display: flex;
+        gap: 16px;
+        margin-top: 18px;
+      }
+      .info-icon {
+        color: #58a0fd;
+        margin-left: 7px;
+        font-size: 1.15rem;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      @media (max-width: 900px) {
+        .dashboard-content { padding: 24px 0; }
+        .dashboard-section, .dashboard-section.column {padding: 20px 10px;}
+        .progress-bar-bg, .progress-bar-labels {width: 100%;}
+      }
+      @media (max-width: 600px) {
+        .dashboard-content {padding: 12px 0;}
+        .dashboard-section, .dashboard-section.column {padding: 12px 2vw;}
+        .profile-avatar {min-width: 70px;min-height: 70px;width: 70px;height: 70px;}
+        .dashboard-section {flex-direction: column; align-items: flex-start; gap:18px;}
+        .btn-row { flex-direction: column; gap: 8px;}
+        .modal {min-width: 0; width: 98vw; padding: 18px 8px 18px 8px;}
+      }
+    </style>
+</head>
+<body>
+    <div class="topo-bg-blur">
+      <svg width="100%" height="100%" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <g>
+          <path d="M165,500 Q450,350 780,540" stroke="#98a8f8" stroke-width="2" fill="none"/>
+          <path d="M60,370 Q400,220 800,420" stroke="#98a8f8" stroke-width="2" fill="none"/>
+          <path d="M200,120 Q480,100 700,170" stroke="#7d87c9" stroke-width="2" fill="none"/>
+          <path d="M100,200 Q400,80 820,200" stroke="#bdbef7" stroke-width="1.5" fill="none"/>
+          <path d="M400,40 Q550,50 680,90" stroke="#5e6ad2" stroke-width="2" fill="none"/>
+          <path d="M80,520 Q380,430 830,580" stroke="#bdbef7" stroke-width="1.5" fill="none"/>
+        </g>
+      </svg>
+    </div>
+    <div class="dashboard-content">
+      <a href="{{ url_for('home') }}" class="back-btn">← Назад</a>
+      <!-- Профиль -->
+      <div class="dashboard-section">
+        <div class="profile-info">
+          <h2>{{ username }}</h2>
+          <div class="email">{{ email }}</div>
+          <div class="profile-info-data">
+            <div><strong>Отчество:</strong> {{ otchestvo or '—' }}</div>
+            <div><strong>Город:</strong> {{ city or '—' }}</div>
+            <div><strong>Пол:</strong> {{ gender or '—' }}</div>
+            <div><strong>Дата рождения:</strong> {{ birthdate or '—' }}</div>
+          </div>
+          <button class="edit-btn" onclick="openModal('profile')">Редактировать</button>
+        </div>
+        <div class="profile-avatar">
+          <!-- SVG-аватар-плейсхолдер -->
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="40" fill="#bdbef7"/>
+            <ellipse cx="40" cy="34" rx="16" ry="16" fill="#8690a5"/>
+            <ellipse cx="40" cy="68" rx="24" ry="14" fill="#8690a5"/>
+          </svg>
+        </div>
+      </div>
+      <!-- Обо мне -->
+      <div class="dashboard-section column">
+        <div class="section-title">Обо мне</div>
+        <div class="section-desc">{{ about or 'Напишите рассказ о себе, это поможет получить задание' }}</div>
+        <button class="edit-btn" onclick="openModal('about')">Редактировать</button>
+      </div>
+      <!-- Рейтинг исполнителя -->
+      <div class="dashboard-section column rating-section">
+        <div style="display:flex; align-items: center; justify-content: space-between; width:100%;">
+          <div class="section-title" style="margin-bottom:0;">Рейтинг исполнителя</div>
+          <span title="Рейтинг формируется на основе оценок и выполненных заданий" class="info-icon">ℹ️</span>
+        </div>
+        <div class="rating-row">
+          <span class="rating-label">Оценки заказчиков</span>
+          <span class="rating-value">
+            <span style="color:#7fb94c;">👍 0</span>
+            <span style="color:#cfcfcf; margin-left:10px;">👎 0</span>
+          </span>
+        </div>
+        <div class="rating-row">
+          <span class="rating-label">Выполнено</span>
+          <span class="rating-value">0 заданий (на 0)</span>
+        </div>
+        <div class="rating-row">
+          <span class="rating-label">Ваше место</span>
+          <span class="rating-value">Вы пока не попали в ТОП-1000</span>
+        </div>
+        <div class="progress-bar-labels">
+          <span class="level-label">Новичок</span>
+          <span class="level-num">Уровень 1</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 36%;">0%</div>
+        </div>
+        <div class="btn-row">
+          <a href="#" class="custom-btn">ТОП Исполнителей</a>
+          <a href="#" class="custom-btn">Показать отзывы</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal-bg" id="modal-profile">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal('profile')">×</button>
+        <h3>Редактировать профиль</h3>
+        <form method="POST" action="{{ url_for('dashboard') }}">
+          <input type="hidden" name="form_type" value="profile">
+          <label>Отчество</label>
+          <input type="text" name="otchestvo" value="{{ otchestvo }}">
+          <label>Город</label>
+          <input type="text" name="city" value="{{ city }}">
+          <label>Пол</label>
+          <input type="text" name="gender" value="{{ gender }}">
+          <label>Дата рождения</label>
+          <input type="date" name="birthdate" value="{{ birthdate }}">
+          <button type="submit" class="modal-submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+    <div class="modal-bg" id="modal-about">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal('about')">×</button>
+        <h3>Редактировать «Обо мне»</h3>
+        <form method="POST" action="{{ url_for('dashboard') }}">
+          <input type="hidden" name="form_type" value="about">
+          <label>Обо мне</label>
+          <textarea name="about" rows="5" placeholder="Напишите рассказ о себе">{{ about }}</textarea>
+          <button type="submit" class="modal-submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      function openModal(which) {
+        document.getElementById('modal-' + which).classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal(which) {
+        document.getElementById('modal-' + which).classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      // Закрытие по клику вне окна
+      document.querySelectorAll('.modal-bg').forEach(bg => {
+        bg.addEventListener('click', function(e){
+          if(e.target === bg) { bg.classList.remove('active'); document.body.style.overflow = ''; }
+        });
+      });
+      // Закрытие по ESC
+      document.addEventListener('keydown', function(e){
+        if(e.key === "Escape"){
+          document.querySelectorAll('.modal-bg.active').forEach(bg => { bg.classList.remove('active'); document.body.style.overflow = ''; });
+        }
+      });
+    </script>
+</body>
+</html>

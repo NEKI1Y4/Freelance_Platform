@@ -1,0 +1,101 @@
+body {
+    background: linear-gradient(to bottom, #e3f0ff 0%, #b3d4fc 100%);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+}
+
+.form-container {
+    background: #fff;
+    max-width: 380px;
+    margin: 60px auto;
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(60,90,150,0.11);
+    padding: 32px 28px 28px 28px;
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 16px;
+}
+
+.logo-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #3887ff 0%, #225db5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+}
+
+.form-header h2 {
+    color: #225db5;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.main-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+label {
+    color: #205090;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    padding: 10px 12px;
+    border: 1.5px solid #b3d4fc;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+    border: 1.5px solid #3887ff;
+}
+
+button[type="submit"] {
+    background: linear-gradient(90deg, #3887ff 0%, #225db5 100%);
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 1rem;
+    margin-top: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(90deg, #225db5 0%, #3887ff 100%);
+}
+
+.success-message {
+    background: #e3f0ff;
+    color: #225db5;
+    border-radius: 8px;
+    padding: 14px 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.flash-messages {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 15px 0;
+    color: #b52d22;
+    text-align: center;
+}

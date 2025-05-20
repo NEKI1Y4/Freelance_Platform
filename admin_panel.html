@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(180deg, #dbeafe 0%, #b5cfff 100%);
+        position: relative;
+        overflow-x: hidden;
+      }
+      .admin-dashboard-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 42px 0 42px 0;
+        position: relative;
+        z-index: 2;
+      }
+      .admin-header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 18px;
+        padding: 0 8px;
+      }
+      .admin-header h2 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        color: #4253a6;
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+      }
+      .admin-search-form {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        max-width: 400px;
+      }
+      .admin-search-input {
+        flex: 1;
+        padding: 9px 15px;
+        border-radius: 7px;
+        border: 1.5px solid #d9e3fa;
+        font-size: 1.1rem;
+        background: #f7f9fc;
+        transition: border 0.17s;
+        font-family: inherit;
+      }
+      .admin-search-input:focus {
+        border: 1.5px solid #7a8fff;
+        outline: none;
+      }
+      .admin-btn {
+        padding: 9px 20px;
+        border-radius: 7px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 1px 6px #bdbef76c;
+        transition: background 0.18s;
+        margin-left: 2px;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .admin-btn-gradient {
+        background: linear-gradient(90deg, #7a8fff 0%, #bdbef7 100%);
+        color: #fff;
+      }
+      .admin-btn-gradient:hover {
+        background: linear-gradient(90deg, #4253a6 0%, #7a8fff 100%);
+      }
+      .admin-btn-edit {
+        background: linear-gradient(90deg, #aacbfa 0%, #6e9eff 100%);
+        color: #fff;
+        margin-right: 2px;
+        font-size: 1.05rem;
+        padding: 6px 14px;
+        border: none;
+      }
+      .admin-btn-edit:hover {
+        background: linear-gradient(90deg, #4253a6 0%, #6e9eff 100%);
+      }
+      .admin-btn-danger {
+        background: linear-gradient(90deg, #ff7b7b 0%, #ffbaba 100%);
+        color: #fff;
+        font-size: 1.05rem;
+        padding: 6px 14px;
+        border: none;
+      }
+      .admin-btn-danger:hover {
+        background: linear-gradient(90deg, #b23a3a 0%, #ffbaba 100%);
+      }
+      .inline-form {
+        display: inline;
+      }
+      .dashboard-section {
+        background: rgba(255,255,255,0.97);
+        border-radius: 16px;
+        box-shadow: 0 2px 18px #9ca4e022;
+        margin-bottom: 30px;
+        padding: 28px 28px 20px 28px;
+        display: flex;
+        flex-direction: column;
+      }
+      .section-title {
+        font-size: 1.23rem;
+        font-weight: 700;
+        color: #6e7bbd;
+        margin-bottom: 14px;
+        letter-spacing: 0.5px;
+      }
+      .table-responsive {
+        overflow-x: auto;
+      }
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0;
+        min-width: 480px;
+        background: #f7f9fc;
+        border-radius: 9px;
+        box-shadow: 0 1px 12px #bdbef74a;
+      }
+      .admin-table th, .admin-table td {
+        border: none;
+        padding: 10px 12px;
+        text-align: left;
+        font-size: 1.04rem;
+      }
+      .admin-table th {
+        background: #eaf0fa;
+        color: #4253a6;
+        font-weight: 700;
+        font-size: 1.09rem;
+      }
+      .admin-table tr:nth-child(even) td {
+        background: #f2f6ff;
+      }
+      .admin-table tr:hover td {
+        background: #e6edff;
+        transition: background 0.18s;
+      }
+      @media (max-width: 900px) {
+        .admin-dashboard-content { padding: 24px 0; }
+        .dashboard-section {padding: 14px 7px;}
+      }
+      @media (max-width: 600px) {
+        .admin-dashboard-content {padding: 8px 0;}
+        .dashboard-section {padding: 8px 2vw;}
+        .admin-table {min-width: 350px;}
+        .admin-header h2 {font-size: 1.4rem;}
+      }
+    </style>
+</head>
+<body>
+<div class="admin-dashboard-content">
+  <div class="admin-header">
+    <h2>Админ-панель</h2>
+    <form method="get" class="admin-search-form">
+      <input type="text" name="search" class="admin-search-input" placeholder="Поиск по имени" value="{{ request.args.get('search', '') }}">
+      <button type="submit" class="admin-btn admin-btn-gradient">Поиск</button>
+    </form>
+  </div>
+
+  <div class="dashboard-section column">
+    <div class="section-title">Пользователи</div>
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Имя</th><th>Email</th><th>Роль</th><th>Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+          <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.role_id }}</td>
+            <td>
+              <a href="{{ url_for('admin_edit_user', user_id=u.id) }}" class="admin-btn admin-btn-edit" title="Редактировать">✎</a>
+              <form method="post" action="{{ url_for('admin_delete_user', user_id=u.id) }}" class="inline-form" onsubmit="return confirm('Удалить пользователя?');">
+                <button type="submit" class="admin-btn admin-btn-danger" title="Удалить">🗑</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dashboard-section column">
+    <div class="section-title">Все заказы</div>
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Позиция</th><th>Работодатель</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for o in orders %}
+          <tr>
+            <td>{{ o.id }}</td>
+            <td>{{ o.position }}</td>
+            <td>{{ o.employer_id }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dashboard-section column">
+    <div class="section-title">Отклики</div>
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Заказ</th><th>Исполнитель</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for r in responses %}
+          <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.order_id }}</td>
+            <td>{{ r.worker_id }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
